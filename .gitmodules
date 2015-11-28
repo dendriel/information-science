@@ -1,0 +1,3 @@
+[submodule "pellet"]
+	path = pellet
+	url = https://github.com/Complexible/pellet.git
