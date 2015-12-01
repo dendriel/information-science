@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="pellet/cli/src/main/java"/>
+	<classpathentry kind="src" path="pellet/core/src/main/java"/>
+	<classpathentry kind="src" path="pellet/examples/src/main/java"/>
+	<classpathentry kind="src" path="pellet/explanation/src/main/java"/>
+	<classpathentry kind="src" path="pellet/jena/src/main/java"/>
+	<classpathentry kind="src" path="pellet/modularity/src/main/java"/>
+	<classpathentry kind="src" path="pellet/owlapi/src/main/java"/>
+	<classpathentry kind="src" path="pellet/owlapi/src/test/java"/>
+	<classpathentry kind="src" path="pellet/pellint/src/main/java"/>
+	<classpathentry kind="src" path="pellet/profiler/src/main/java"/>
+	<classpathentry kind="src" path="pellet/profiler/src/test/java"/>
+	<classpathentry kind="src" path="pellet/protege/src/main/java"/>
+	<classpathentry kind="src" path="pellet/query/src/main/java"/>
+	<classpathentry kind="src" path="pellet/test/src/test/java"/>
+	<classpathentry kind="lib" path="pellet/protege/plugin/com.clarkparsia.protege.plugin.pellet.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

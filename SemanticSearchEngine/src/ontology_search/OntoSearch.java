@@ -1,5 +1,5 @@
 /*     */ package ontology_search;
-/*     */ 
+
 /*     */ import aterm.ATermAppl;
 /*     */ import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
 /*     */ import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
@@ -17,12 +17,6 @@
 /*     */ import org.semanticweb.owlapi.model.OWLOntology;
 /*     */ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 /*     */ import org.semanticweb.owlapi.model.OWLOntologyManager;
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
-/*     */ 
 /*     */ 
 /*     */ 
 /*     */ 
@@ -295,7 +289,7 @@
 /*     */     
 /*     */ 
 /* 293 */     class_list = this.m_KnowledgeBase.getSubClasses(ref);
-/* 294 */     for (localIterator1 = class_list.iterator(); localIterator1.hasNext(); 
+/* 294 */     Iterator localIterator1; for (localIterator1 = class_list.iterator(); localIterator1.hasNext(); 
 /*     */         
 /* 296 */         localIterator2.hasNext())
 /*     */     {
@@ -336,7 +330,7 @@
 /*     */ 
 /* 325 */     System.out.println("Subclasses: ");
 /* 326 */     class_list = this.m_KnowledgeBase.getSubClasses(ref);
-/* 327 */     for (localIterator1 = class_list.iterator(); localIterator1.hasNext(); 
+/* 327 */     Iterator localIterator1; for (localIterator1 = class_list.iterator(); localIterator1.hasNext(); 
 /*     */         
 /* 329 */         localIterator2.hasNext())
 /*     */     {
