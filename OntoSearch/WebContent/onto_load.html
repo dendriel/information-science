@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!-- Template by quackit.com -->
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      	<script type="text/javascript" src="validator.js" ></script>      
+		<link rel="stylesheet" type="text/css" href="mystyle.css">		
+		<title>OntoSearch</title>
+	</head>
+	
+	<body>
+	<div id="container">
+	    <div id="header">
+			<header>
+			<div class="header_image"></div>
+			<div class="header_tip">First step... Load an ontology from file system or remote host.</div>
+			</header>
+		</div>
+		
+	    <div id="body">
+		    <main>
+				<div id="load_form">
+					<form action="SearchServlet" method="post">
+						<input type="text" size="96" name="onto_load_input_box" onchange="return trimLong(this)" class="input_box"/>
+						<input type="submit" value="Load Ontology" />
+						<input type="hidden" name="page_id" value="load_page">
+					</form>
+				</div>
+				<br /> e.g: <i>http://protege.stanford.edu/ontologies/pizza/pizza.owl</i> 
+			</main>
+	    </div>
+	    
+	    <div id="footer">
+		    <footer>
+				<p></p>
+			</footer>
+		</div>
+	</div>
+		
+	</body>
+</html>
