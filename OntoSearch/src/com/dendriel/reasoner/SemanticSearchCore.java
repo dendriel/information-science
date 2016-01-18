@@ -75,6 +75,11 @@ public class SemanticSearchCore
 	 */
 	public Boolean LoadOntology(String path)
 	{		
+		if (loadedOnto != null) {
+			ontoMan.removeOntology(loadedOnto);
+			loadedOnto = null;
+		}
+		
 		// Decide which method it must use to load the ontology.
 		if (path.contains(httpProtoStr) || path.contains(httpsProtoStr)) {
 			loadedOnto = LoadOntologyURL(ontoMan, path);
