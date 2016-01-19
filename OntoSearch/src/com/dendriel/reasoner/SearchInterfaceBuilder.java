@@ -1,6 +1,9 @@
 package com.dendriel.reasoner;
 
 import java.util.List;
+import java.util.Set;
+
+import aterm.ATermAppl;
 
 public class SearchInterfaceBuilder
 {
@@ -19,6 +22,7 @@ public class SearchInterfaceBuilder
 	private final static String loadPageSubmit = "Load Ontology";
 	private final static String loadPageFooter = "<br /><i>Developed by Vitor Rozsa and Marta Denisczwicz.</i>";
 	private final static String loadPageColor = "#7BB5FF";
+	private final static String loadPageExtraData = "";
 	
 	private final static String searchPageTitle = "Search Page";
 	private final static String searchPageGoBackLink = "<button style=\"height:32px;width:128px\" onclick=\"goBack()\">Back to Load Page</button>";
@@ -63,18 +67,39 @@ public class SearchInterfaceBuilder
 "			</main>\n";
 
 	private final static String searchBodyInputStr =
-"		    <main>\n"													+
-"				<div id=\"load_form\">\n"								+
+"		    <main>\n"												+	
+"				<div name=\"load_form\">\n"						+
 "					<form name=\"" + SearchPageFormKey + "\" onsubmit=\"return searchTerm()\">\n"+
-"						<input type=\"text\" size=\"96\" name=\"" + SearchPageInputKey + "\" style=\"border:solid %s\" onchange=\"return trimLong(this)\" class=\"awesomplete\" list=\"terms\"/><br />\n"+
-"<datalist id=\"terms\">\n"+
-"	%s"+
-"</datalist>\n"+
+"						<input type=\"text\" size=\"96\" name=\"" + SearchPageInputKey + "\" style=\"border:solid %s\" onsubmit=\"trimLong(this);\" oninput=\"loadRelated(this)\" class=\"awesomplete\" list=\"terms\"/><br />\n"+
+"						<datalist id=\"terms\">\n"				+
+"							%s"									+
+"						</datalist>\n"							+
 "						<input type=\"submit\" value=\"" + searchPageSubmit + "\" />\n"		+
 "						<input type=\"hidden\" name=\"page_id\" value=\"" + SearchPageId + "\">\n"+
-"					</form>\n"										+
-"				</div>\n"											+
-"				<br />\n"											+ 
+"					</form>\n"									+
+"				</div>\n"										+
+"				<br />\n"										+
+"			<form  name=\"termsTable\"><table>" 					+
+"				<tr>\n" 											+
+"					<th><i>Specifc terms</i></th>\n" 				+	
+"					<th><i>Generic terms</i></th>\n" 				+	
+"					<th><i>Synonyms terms</i></th>\n" 				+		
+"				</tr>\n" 											+
+"				<tr>\n" 											+
+"					<td>\n" 										+
+"						<select name=\"specificTerms\" size=\"18\" multiple=\"multiple\">\n" +
+"						</select>\n" 								+
+"					</td>\n" 										+	
+"					<td>\n" 										+
+"						<select name=\"genericTerms\" size=\"18\" multiple=\"multiple\">\n" +
+"						</select>\n" 								+
+"					</td>\n" 										+	
+"					<td>\n" 										+
+"						<select name=\"synonymTerms\" size=\"18\" multiple=\"multiple\">\n" +
+"						</select>\n" 								+
+"					</td>\n" 										+
+"				</tr>" 												+
+"			</table></form>\n" 										+
 "			</main>\n";
 	
 	private final static String pageFooterStr =
@@ -99,7 +124,8 @@ public class SearchInterfaceBuilder
 				loadPageColor,
 				loadPageTip,
 				bodyInputFormated,
-				loadPageFooter);
+				loadPageFooter,
+				loadPageExtraData);
 	}
 	
 	/**
@@ -109,6 +135,9 @@ public class SearchInterfaceBuilder
 	public static String BuildSearchPage(SemanticSearchCore smtCore)
 	{
 		String bodyInputFormated = String.format(searchBodyInputStr, searchPageColor, BuildSearchTermsList(smtCore.GetAllTermsStr()));
+		String relatedTerms = BuildSpecificRelatedTerms(smtCore);
+		relatedTerms += BuildGenericRelatedTerms(smtCore);
+		relatedTerms += BuildSynonymRelatedTerms(smtCore);
 		
 		return BuildPage(
 				searchPageTitle,
@@ -116,17 +145,21 @@ public class SearchInterfaceBuilder
 				searchPageColor,
 				searchPageTip,
 				bodyInputFormated,
-				searchPageFooter);
+				searchPageFooter,
+				relatedTerms);
 	}
+	
 	
 	/**
 	 * Generic function to build the OntoSearch page.
-	 * @param pageId
+	 * 
 	 * @param title
+	 * @param link
+	 * @param color
 	 * @param tip
-	 * @param submit
-	 * @param example
+	 * @param bodyInputFormat
 	 * @param footer
+	 * @param extraData Append an extra string at the end of the page (for instance, append js data).
 	 * @return
 	 */
 	private static String BuildPage(
@@ -135,15 +168,17 @@ public class SearchInterfaceBuilder
 			String color,
 			String tip,
 			String bodyInputFormat,
-			String footer)
+			String footer,
+			String extraData)
 	{
-		String page = String.format(pageHeadStr + bodyHeaderStr + bodyInputFormat + pageFooterStr,
+		String page = String.format(pageHeadStr + bodyHeaderStr + bodyInputFormat + pageFooterStr + "%s",
 				title,
 				link,
 				color,
 				tip,
 				color,
-				footer
+				footer,
+				extraData
 				);
 		
 		return page;
@@ -161,5 +196,86 @@ public class SearchInterfaceBuilder
 			optionsList += String.format("<option>%s</option>\n", term);
 		}
 		return optionsList;
+	}
+	
+	/**
+	 * Make all the specific related terms available for javascript processing.
+	 * @param smtCore
+	 * @return
+	 */
+	private static String BuildSpecificRelatedTerms(SemanticSearchCore smtCore)
+	{
+		Set<ATermAppl> termsList = smtCore.GetAllTerms();
+
+		String termsStr = "\n<script>var specificTerms = [\n";
+		for (ATermAppl term : termsList) {
+			
+			termsStr += String.format("{ term: \"%s\", values: [",
+					SemanticSearchCore.GetTermName(SemanticSearchCore.GetClassNameFromURI(term.toString())));
+			
+			List<String> subClassesList = smtCore.GetAllSubClasses(term);
+			
+			for (String related : subClassesList) {
+				termsStr += "\"" + related + "\", ";
+			}
+			termsStr += "] },\n";
+		}
+		termsStr += "];</script>\n";
+		
+		return termsStr;
+	}
+	
+	/**
+	 * Make all the generic related terms available for javascript processing.
+	 * @param smtCore
+	 * @return
+	 */
+	private static String BuildGenericRelatedTerms(SemanticSearchCore smtCore)
+	{
+		Set<ATermAppl> termsList = smtCore.GetAllTerms();
+
+		String termsStr = "\n<script>var genericTerms = [\n";
+		for (ATermAppl term : termsList) {
+			
+			termsStr += String.format("{ term: \"%s\", values: [",
+					SemanticSearchCore.GetTermName(SemanticSearchCore.GetClassNameFromURI(term.toString())));
+			
+			List<String> superClassesList = smtCore.GetAllSuperClasses(term);
+			
+			for (String related : superClassesList) {
+				termsStr += "\"" + related + "\", ";
+			}
+			termsStr += "] },\n";
+		}
+		termsStr += "];</script>\n";
+		
+		return termsStr;
+	}
+	
+	/**
+	 * Make all the synonym terms available for javascript processing.
+	 * @param smtCore
+	 * @return
+	 */
+	private static String BuildSynonymRelatedTerms(SemanticSearchCore smtCore)
+	{
+		Set<ATermAppl> termsList = smtCore.GetAllTerms();
+
+		String termsStr = "\n<script>var synonymTerms = [\n";
+		for (ATermAppl term : termsList) {
+			
+			termsStr += String.format("{ term: \"%s\", values: [",
+					SemanticSearchCore.GetTermName(SemanticSearchCore.GetClassNameFromURI(term.toString())));
+			
+			List<String> synonymClassesList = smtCore.GetAllSynonyms(term);
+			
+			for (String related : synonymClassesList) {
+				termsStr += "\"" + related + "\", ";
+			}
+			termsStr += "] },\n";
+		}
+		termsStr += "];</script>\n";
+		
+		return termsStr;
 	}
 }

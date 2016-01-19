@@ -31,8 +31,7 @@ public class SearchServlet extends HttpServlet
 	private static final String pageIdKey = "page_id";
 
 	// Page names.
-	private static final String ontoLoadPage = "/onto_load.html";
-	private static final String ontoSearchPage = "/onto_search.html";
+	private static final String emptyPage = "/empty.jsp";
 	
 	/**
      * @see HttpServlet#HttpServlet()
@@ -154,8 +153,11 @@ public class SearchServlet extends HttpServlet
 	void handleSearchPage(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
 	{
-        RequestDispatcher rd = getServletContext().getRequestDispatcher("/empty.html");
+        RequestDispatcher rd = getServletContext().getRequestDispatcher(emptyPage);
         PrintWriter out = response.getWriter();
+        
+
+        request.setAttribute("vartest", "HELLO");
         
         out.println(SearchInterfaceBuilder.BuildSearchPage((SemanticSearchCore) request.getSession().getAttribute(smtSearchCoreKey)));        
         rd.include(request, response);
@@ -171,7 +173,7 @@ public class SearchServlet extends HttpServlet
 	void loadDefaultPage(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException
 	{
-        RequestDispatcher rd = getServletContext().getRequestDispatcher("/empty.html");
+        RequestDispatcher rd = getServletContext().getRequestDispatcher(emptyPage);
         PrintWriter out = response.getWriter();
         
         out.println(SearchInterfaceBuilder.BuildLoadPage());        

@@ -2,6 +2,9 @@ package com.dendriel.reasoner;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -42,7 +45,21 @@ public class SemanticSearchCore
 	 */
 	public Set<ATermAppl> GetAllTerms()
 	{
-		return reasoner.getKB().getAllClasses();
+		Set<ATermAppl> classList = reasoner.getKB().getAllClasses();
+
+		Set<ATermAppl> classListFiltered = new HashSet<ATermAppl>();
+		
+		for (ATermAppl elem : classList) {
+			String className = GetClassNameFromURI(elem.toString());
+			// Filter off these class names.
+			if (className.equals("_TOP_") || className.equals("not(_TOP_)") || className.equals("top")) {
+				continue;
+			}
+			
+			classListFiltered.add(elem);
+		}
+		
+		return classListFiltered;
 	}
 	/**
 	 * Get all terms from the ontology.
@@ -56,9 +73,8 @@ public class SemanticSearchCore
 		
 		for (ATermAppl elem : classList) {
 			String className = GetClassNameFromURI(elem.toString());
-			
 			// Filter off these class names.
-			if (className.equals("_TOP_") || className.equals("not(_TOP_)") || className.equals("top")) {
+			if (IsValidClassName(className) == false) {
 				continue;
 			}
 			
@@ -66,6 +82,78 @@ public class SemanticSearchCore
 		}
 		
 		return classListStr;
+	}
+	
+	/**
+	 * Get all sub classes from the given term.
+	 * @return A list of string with the sub class names.
+	 */
+	public List<String> GetAllSubClasses(ATermAppl term)
+	{
+		List<String> subClassesList =  new ArrayList<String>();
+		Set<Set<ATermAppl>> subClasses = reasoner.getKB().getSubClasses(term);
+		
+		for (Set<ATermAppl> termList : subClasses) {
+			
+			for (ATermAppl termFromSet : termList) {
+
+				String className = GetClassNameFromURI(termFromSet.toString());
+				// Filter off these class names.
+				if (IsValidClassName(className) == false) continue;
+				
+				subClassesList.add(GetTermName(className));
+			}
+		}
+		return subClassesList;
+	}
+	
+	/**
+	 * Get all super classes from the given term.
+	 * @return A list of string with the super class names.
+	 */
+	public List<String> GetAllSuperClasses(ATermAppl term)
+	{
+		List<String> superClassesList =  new ArrayList<String>();
+		Set<Set<ATermAppl>> superClasses = reasoner.getKB().getSuperClasses(term);
+		
+		for (Set<ATermAppl> termList : superClasses) {
+			
+			for (ATermAppl termFromSet : termList) {
+
+				String className = GetClassNameFromURI(termFromSet.toString());
+				// Filter off these class names.
+				if (IsValidClassName(className) == false) continue;
+				
+				superClassesList.add(GetTermName(className));
+			}
+		}
+		return superClassesList;
+	}
+	
+	/**
+	 * Get all synonyms from the given term.
+	 * @return A list of string with the synonym class names.
+	 */
+	public List<String> GetAllSynonyms(ATermAppl term)
+	{
+		List<String> synonymClassesList =  new ArrayList<String>();
+		Set<ATermAppl> synonymClasses = reasoner.getKB().getAllEquivalentClasses(term);
+				
+		for (ATermAppl termFromSet : synonymClasses) {
+
+			String className = GetClassNameFromURI(termFromSet.toString());
+			
+			// Filter off these class names.
+			if (IsValidClassName(className) == false) continue;
+			
+			String termName = GetTermName(className);
+			// Don't add the same term in the synonym list.
+			if (termFromSet == term) continue;
+			
+			synonymClassesList.add(termName);
+		}
+		
+		return synonymClassesList;
 	}
 	
 	/**
@@ -150,7 +238,7 @@ public class SemanticSearchCore
 	 * @param term
 	 * @return A non-formatted class name.
 	 */
-	private String GetClassNameFromURI(String term)
+	public static String GetClassNameFromURI(String term)
 	{
 		String[] termSplitted = term.toString().split("#");
 	
@@ -173,7 +261,7 @@ public class SemanticSearchCore
 	 * @param s The class name
 	 * @return A human readable string.
 	 */
-	private static String GetTermName(String s)
+	public static String GetTermName(String s)
 	{
 	   return s.replaceAll(
 	      String.format("%s|%s|%s",
@@ -183,5 +271,20 @@ public class SemanticSearchCore
 	      ),
 	      " "
 	   );
+	}
+	
+	/**
+	 * Checks if the class name is valid
+	 * 
+	 * @param name
+	 * @return true if the name is valid; false if the name isn't valid.
+	 */
+	public static Boolean IsValidClassName(String className)
+	{
+		if (className.equals("_TOP_") || className.equals("not(_TOP_)") || className.equals("top")) {
+			return false;
+		} else {
+			return true;
+		}		
 	}
 }

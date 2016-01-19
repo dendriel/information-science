@@ -25,7 +25,7 @@ div.header_link {
 	text-indent: 1%;
 	height:32px;
 	width:100%;
-	padding-bottom:10px;
+	padding-bottom:1%;
 }
 
 div.header_tip {
@@ -33,9 +33,27 @@ div.header_tip {
 	text-indent: 2%;
 }
 
-header h1 {
-	margin: 0;
-	padding-top: 15px;
+table {
+	width: 100%;
+}
+
+th {
+	font-size: x-large;
+}
+
+td {
+	width: 33%;
+    padding-bottom:2.5%;   /* Height of the footer */
+}
+
+td select {
+	height: 100%;
+	
+}
+
+select {
+	text-align:center;
+	width: 100%;
 }
 
 main {
@@ -43,18 +61,8 @@ main {
 	/*padding-bottom: 10010px;
 	margin-bottom: -10000px;*/
 	padding-top: 2.5%;
-	padding-bottom: 30%;	/* Height of the footer */
 	float: left;
 	width: 100%;
-}
-
-nav {
-	padding-bottom: 10010px;
-	margin-bottom: -10000px;
-	float: left;
-	width: 230px;
-	margin-left: -230px;
-	background: #eee;
 }
 
 footer {
@@ -86,7 +94,4 @@ html, body {
 #container {
     min-height:100%;
     position:relative;
-}
-#body {
-    padding-bottom:40px;   /* Height of the footer */
 }

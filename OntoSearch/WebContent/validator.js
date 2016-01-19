@@ -4,9 +4,9 @@
  * @returns
  */
 function trimLong (str)
-{	
+{
 	str.value = str.value.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-	return;
+	return str.value;
 }
 
 /**
@@ -39,8 +39,8 @@ function validateLoadForm()
  */
 function validateSearchForm()
 {
-	var str = document.onto_search_input_form['onto_search_input_box'].value
-
+	var str = document.onto_search_input_form['onto_search_input_box'].value;
+	
 	if (str.length == 0) {
 		alert("Please, provide one or more terms to be searched.");
 		return false;
@@ -49,12 +49,53 @@ function validateSearchForm()
 	}	
 }
 
+function loadRelated(str)
+{
+	var term = str.value.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+	
+	document.termsTable.specificTerms.options.length = 0;
+	document.termsTable.genericTerms.options.length = 0;
+	document.termsTable.synonymTerms.options.length = 0;
+	
+	// Load the specific terms.
+	for (i = 0; i < specificTerms.length; i++) {
+		
+		if (specificTerms[i].term.toLowerCase() == term.toLowerCase()) {
+			for (j = 0; j < specificTerms[i].values.length; j++) {
+				document.termsTable.specificTerms.options[j] = new Option(specificTerms[i].values[j], "", false, false);		
+			}
+			break;
+		}
+	}
+
+	// Load the generic terms.
+	for (i = 0; i < genericTerms.length; i++) {
+		if (genericTerms[i].term.toLowerCase() == term.toLowerCase()) {
+			for (j = 0; j < genericTerms[i].values.length; j++) {
+				document.termsTable.genericTerms.options[j] = new Option(genericTerms[i].values[j], "", false, false);		
+			}
+			break;
+		}	
+	}	
+	
+	// Load the synonym terms.
+	for (i = 0; i < synonymTerms.length; i++) {
+		if (synonymTerms[i].term.toLowerCase() == term.toLowerCase()) {
+			for (j = 0; j < synonymTerms[i].values.length; j++) {
+				document.termsTable.synonymTerms.options[j] = new Option(synonymTerms[i].values[j], "", false, false);		
+			}
+			break;
+		}	
+	}	
+}
+
 /**
  * Build the search term and submit it to google.
  */
 function searchTerm ()
-{
+{	
 	if (!validateSearchForm()) return;
+
 	
 	var str = document.onto_search_input_form['onto_search_input_box'].value
 	var terms = str.split(" ");
