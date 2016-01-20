@@ -62,7 +62,7 @@ function loadRelated(str)
 		
 		if (specificTerms[i].term.toLowerCase() == term.toLowerCase()) {
 			for (j = 0; j < specificTerms[i].values.length; j++) {
-				document.termsTable.specificTerms.options[j] = new Option(specificTerms[i].values[j], "", false, false);		
+				document.termsTable.specificTerms.options[j] = new Option(specificTerms[i].values[j], specificTerms[i].values[j], false, false);		
 			}
 			break;
 		}
@@ -72,7 +72,7 @@ function loadRelated(str)
 	for (i = 0; i < genericTerms.length; i++) {
 		if (genericTerms[i].term.toLowerCase() == term.toLowerCase()) {
 			for (j = 0; j < genericTerms[i].values.length; j++) {
-				document.termsTable.genericTerms.options[j] = new Option(genericTerms[i].values[j], "", false, false);		
+				document.termsTable.genericTerms.options[j] = new Option(genericTerms[i].values[j], genericTerms[i].values[j], false, false);		
 			}
 			break;
 		}	
@@ -82,11 +82,22 @@ function loadRelated(str)
 	for (i = 0; i < synonymTerms.length; i++) {
 		if (synonymTerms[i].term.toLowerCase() == term.toLowerCase()) {
 			for (j = 0; j < synonymTerms[i].values.length; j++) {
-				document.termsTable.synonymTerms.options[j] = new Option(synonymTerms[i].values[j], "", false, false);		
+				document.termsTable.synonymTerms.options[j] = new Option(synonymTerms[i].values[j], synonymTerms[i].values[j], false, false);		
 			}
 			break;
 		}	
 	}	
+}
+
+/**
+ * Update the search field with the selected term. Also, update the related terms.
+ * @param selected_term
+ */
+function selectSpecificTerm(selected_term)
+{
+	document.onto_search_input_form['onto_search_input_box'].value = selected_term.value;
+	
+	loadRelated(selected_term);
 }
 
 /**

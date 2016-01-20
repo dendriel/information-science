@@ -58,8 +58,8 @@ public class SearchInterfaceBuilder
 "		    <main>\n"													+
 "				<div id=\"load_form\">\n"								+
 "					<form name=\"" + LoadPageFormKey + "\" action=\"SearchServlet\" method=\"post\" onsubmit=\"return validateLoadForm()\">\n"+
-"						<input type=\"text\" size=\"96\" name=\"" + LoadPageInputKey + "\" style=\"border:solid %s\" onchange=\"return trimLong(this)\"/><br />\n"+
-"						<input type=\"submit\" value=\"" + loadPageSubmit + "\" />\n"		+
+"						<input type=\"text\" size=\"96\" name=\"" + LoadPageInputKey + "\" style=\"border:solid %s\" onchange=\"return trimLong(this)\"/><br /><br />\n"+
+"						<input class=\"myButton\" type=\"submit\" value=\"" + loadPageSubmit + "\" />\n"		+
 "						<input type=\"hidden\" name=\"page_id\" value=\"" + LoadPageId + "\">\n"+
 "					</form>\n"											+
 "				</div>\n"												+
@@ -70,11 +70,11 @@ public class SearchInterfaceBuilder
 "		    <main>\n"												+	
 "				<div name=\"load_form\">\n"						+
 "					<form name=\"" + SearchPageFormKey + "\" onsubmit=\"return searchTerm()\">\n"+
-"						<input type=\"text\" size=\"96\" name=\"" + SearchPageInputKey + "\" style=\"border:solid %s\" onsubmit=\"trimLong(this);\" oninput=\"loadRelated(this)\" class=\"awesomplete\" list=\"terms\"/><br />\n"+
+"						<input type=\"text\" size=\"96\" name=\"" + SearchPageInputKey + "\" style=\"border:solid %s\" onsubmit=\"trimLong(this);\" oninput=\"loadRelated(this)\" class=\"awesomplete\" list=\"terms\"/><br /><br />\n"+
 "						<datalist id=\"terms\">\n"				+
 "							%s"									+
 "						</datalist>\n"							+
-"						<input type=\"submit\" value=\"" + searchPageSubmit + "\" />\n"		+
+"						<input class=\"myButton\" type=\"submit\" value=\"" + searchPageSubmit + "\" />\n"		+
 "						<input type=\"hidden\" name=\"page_id\" value=\"" + SearchPageId + "\">\n"+
 "					</form>\n"									+
 "				</div>\n"										+
@@ -87,15 +87,15 @@ public class SearchInterfaceBuilder
 "				</tr>\n" 											+
 "				<tr>\n" 											+
 "					<td>\n" 										+
-"						<select name=\"specificTerms\" size=\"18\" multiple=\"multiple\">\n" +
+"						<select name=\"specificTerms\" size=\"18\" multiple=\"multiple\" ondblclick=\"selectSpecificTerm(this)\">\n" +
 "						</select>\n" 								+
 "					</td>\n" 										+	
 "					<td>\n" 										+
-"						<select name=\"genericTerms\" size=\"18\" multiple=\"multiple\">\n" +
+"						<select name=\"genericTerms\" size=\"18\" multiple=\"multiple\" ondblclick=\"selectSpecificTerm(this)\">\n" +
 "						</select>\n" 								+
 "					</td>\n" 										+	
 "					<td>\n" 										+
-"						<select name=\"synonymTerms\" size=\"18\" multiple=\"multiple\">\n" +
+"						<select name=\"synonymTerms\" size=\"18\" multiple=\"multiple\" ondblclick=\"selectSpecificTerm(this)\">\n" +
 "						</select>\n" 								+
 "					</td>\n" 										+
 "				</tr>" 												+
