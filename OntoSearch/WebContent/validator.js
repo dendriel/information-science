@@ -90,14 +90,36 @@ function loadRelated(str)
 }
 
 /**
+ * Check if the terms interaction is set to "surf".
+ * 
+ * @returns {Boolean} true if the interaction is "surf"; false if the interaction is "combine".
+ */
+function isSurfing ()
+{
+	if ((document.interactionForm.interaction[0].value == "surf") &&
+		(document.interactionForm.interaction[0].checked == true)) {
+		return true;
+	} else if ((document.interactionForm.interaction[0].value == "combine") &&
+			(document.interactionForm.interaction[0].checked == false)) {
+		return true;		
+	}
+	
+	return false;
+}
+
+/**
  * Update the search field with the selected term. Also, update the related terms.
  * @param selected_term
  */
 function selectSpecificTerm(selected_term)
-{
-	document.onto_search_input_form['onto_search_input_box'].value = selected_term.value;
-	
-	loadRelated(selected_term);
+{	
+	if (isSurfing()) {
+		//document.onto_search_input_form['onto_search_input_box'].value = selected_term.value;
+		loadRelated(selected_term);
+	} else {
+		var currentTerm = document.onto_search_input_form['onto_search_input_box'].value;
+		document.onto_search_input_form['onto_search_input_box'].value = currentTerm + ", " + selected_term.value;	
+	}	
 }
 
 /**
@@ -132,5 +154,6 @@ function searchTerm ()
 	    alert('Please allow popups for this site.');
 	}
 	
-	return;
+	// Don't allow the submission so the interface can keep the selected search terms.
+	return false;
 }

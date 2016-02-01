@@ -2,9 +2,7 @@ package com.dendriel.reasoner;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -13,9 +11,6 @@ import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
-
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import aterm.ATermAppl;
 
@@ -28,7 +23,6 @@ public class SemanticSearchCore
 	private OWLOntologyManager ontoMan;
 	private OWLOntology loadedOnto;
 	private PelletReasoner reasoner;
-	private String loadedOntologyPath;
 	
 	private static final String httpProtoStr = "http://";
 	private static final String httpsProtoStr = "http://";
@@ -36,7 +30,6 @@ public class SemanticSearchCore
 	public SemanticSearchCore()
 	{
 		ontoMan = OWLManager.createOWLOntologyManager();
-		//reasoner = ModelFactory.createOntologyModel(PelletReasonerFactory.THE_SPEC);
 	}
 
 	/**
@@ -178,8 +171,6 @@ public class SemanticSearchCore
 				
 		if (loadedOnto == null) return false;
 		
-		loadedOntologyPath = path;
-		
 		// Setup the Pellet reasoner.
 		reasoner = PelletReasonerFactory.getInstance().createReasoner( loadedOnto );
 		
@@ -244,10 +235,6 @@ public class SemanticSearchCore
 	
 		// Split class name from URI.
 		String className = termSplitted[(termSplitted.length - 1)];
-		
-		//className = className.replaceAll("_", " ");	
-		//className = className.toLowerCase();	
-		//className = className.replaceAll("\\s", "");
 	
 		return className;
 	}

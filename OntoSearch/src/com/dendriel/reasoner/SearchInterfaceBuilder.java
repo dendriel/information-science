@@ -30,6 +30,7 @@ public class SearchInterfaceBuilder
 	private final static String searchPageSubmit = "Search";
 	private final static String searchPageFooter = loadPageFooter;
 	private final static String searchPageColor = "#ff837b";
+	private final static String searchPageInteractionFormName = "interactionForm";
 	
 	private final static String pageHeadStr =
 "<!DOCTYPE html>\n"																+
@@ -68,7 +69,7 @@ public class SearchInterfaceBuilder
 
 	private final static String searchBodyInputStr =
 "		    <main>\n"												+	
-"				<div name=\"load_form\">\n"						+
+"				<div name=\"search_form\">\n"						+
 "					<form name=\"" + SearchPageFormKey + "\" onsubmit=\"return searchTerm()\">\n"+
 "						<input type=\"text\" size=\"96\" name=\"" + SearchPageInputKey + "\" style=\"border:solid %s\" onsubmit=\"trimLong(this);\" oninput=\"loadRelated(this)\" class=\"awesomplete\" list=\"terms\"/><br /><br />\n"+
 "						<datalist id=\"terms\">\n"				+
@@ -78,6 +79,12 @@ public class SearchInterfaceBuilder
 "						<input type=\"hidden\" name=\"page_id\" value=\"" + SearchPageId + "\">\n"+
 "					</form>\n"									+
 "				</div>\n"										+
+"				<br />\n"										+
+"				<form name=\"" + searchPageInteractionFormName + "\">" +
+"					<b>Interaction Type:</b> " +
+"					<input type=\"radio\" name=\"interaction\" value=\"surf\" checked> Surf" +
+"					<input type=\"radio\" name=\"interaction\" value=\"combine\"> Combine<br />" +
+"				</form> " +
 "				<br />\n"										+
 "			<form  name=\"termsTable\"><table>" 					+
 "				<tr>\n" 											+
