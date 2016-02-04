@@ -221,6 +221,7 @@ public class SearchInterfaceBuilder
 					SemanticSearchCore.GetTermName(SemanticSearchCore.GetClassNameFromURI(term.toString())));
 			
 			List<String> subClassesList = smtCore.GetAllSubClasses(term);
+			subClassesList.addAll(smtCore.GetIndividuals(term, true));
 			
 			for (String related : subClassesList) {
 				termsStr += "\"" + related + "\", ";

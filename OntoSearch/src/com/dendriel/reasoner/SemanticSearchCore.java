@@ -96,8 +96,31 @@ public class SemanticSearchCore
 				
 				subClassesList.add(GetTermName(className));
 			}
-		}
+		}		
 		return subClassesList;
+	}
+	
+	/**
+	 * Get all individuals from the given term.
+	 * 
+	 * @param direct - get only direct individuals (true) or all individuals (false);
+	 * 
+	 * @return A list of string with the individuals names.
+	 */
+	public List<String> GetIndividuals(ATermAppl term, Boolean direct)
+	{
+		List<String> individualsList =  new ArrayList<String>();
+		Set<ATermAppl> individuals = reasoner.getKB().getInstances(term, direct);
+					
+		for (ATermAppl termFromSet : individuals) {
+
+			String individualName = GetClassNameFromURI(termFromSet.toString());
+			// Filter off these class names.
+			if (IsValidClassName(individualName) == false) continue;
+			
+			individualsList.add(GetTermName(individualName));
+		}
+		return individualsList;
 	}
 	
 	/**
